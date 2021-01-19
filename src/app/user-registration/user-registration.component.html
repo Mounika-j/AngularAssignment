@@ -1,0 +1,108 @@
+<form #userRegistrationForm="ngForm" autocomplete="off" novalidate (ngSubmit)="userRegistrationForm.form.valid && registrationFunction()" class="registration-form">
+    <h2>User Registraion Form</h2>
+    <div class="form-group">
+        <div class="search-wrap">
+            <span class="input-label">First Name</span><span class="text-danger"> *</span>
+        </div>
+        <input type="text" #firstname='ngModel' pattern="^[a-zA-Z\s]{1,50}$" name="firstname" [(ngModel)]='userRegistrationObj.firstName' placeholder="Enter First Name" [ngClass]="{'is-invalid': userRegistrationForm.submitted && firstname.invalid }" required>
+        <div *ngIf="firstname.invalid && ((firstname.dirty || firstname.touched) || userRegistrationForm.submitted)" class="alert alert-danger">
+            <div *ngIf="firstname.errors.required">
+                First Name is required.
+            </div>
+            <div *ngIf="firstname.errors.pattern">
+                Please enter Alphabets only.
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="search-wrap">
+            <span class="input-label">Last Name</span><span class="text-danger"> *</span>
+        </div>
+        <input type="text" #lastname='ngModel' pattern="^[a-zA-Z\s]{1,50}$" name="lastname" [(ngModel)]='userRegistrationObj.lastName' placeholder="Enter Last Name" [ngClass]="{'is-invalid': userRegistrationForm.submitted && lastname.invalid }" required>
+        <div *ngIf="lastname.invalid && ((lastname.dirty || lastname.touched) || userRegistrationForm.submitted)" class="alert alert-danger">
+            <div *ngIf="lastname.errors.required">
+                Last Name is required.
+            </div>
+            <div *ngIf="lastname.errors.pattern">
+                Please enter Alphabets only.
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-group form-group-three-block mar-r24">
+            <div class="search-wrap">
+                <span class="input-label">Gender</span><span class="text-danger"> *</span>
+            </div>
+            <select name="gender" #gender='ngModel' [(ngModel)]='userRegistrationObj.genderId' placeholder="Choose..." [ngClass]="{'is-invalid': userRegistrationForm.submitted && gender.invalid }" required>
+                <option value=null>Choose...</option>
+                <option *ngFor="let option of genders" [value]="option.GenderID" >{{option.GenderName}}</option>
+            </select>
+            <div *ngIf="gender.invalid && ((gender.dirty || gender.touched) || userRegistrationForm.submitted)" class="alert alert-danger">
+                <div *ngIf="gender.errors.required">
+                    Gender is required.
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="search-wrap">
+            <span class="input-label">Email Id</span>
+        </div>
+        <input type="email" #email='ngModel' pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" name="email" [(ngModel)]='userRegistrationObj.eMail' placeholder="Enter Email Id">
+        <div *ngIf="email.invalid && ((email.dirty || email.touched) || userRegistrationForm.submitted)" class="alert alert-danger">
+            <div *ngIf="email.errors.required">
+                Email is required.
+            </div>
+            <div *ngIf="email.errors.pattern">
+                Please enter valid Email ID.
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="search-wrap">
+            <span class="input-label">Password </span><span class="text-danger"> *</span>
+        </div>
+        <input type="password" #CatchWord='ngModel' pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$" name="CatchWord" [(ngModel)]='userRegistrationObj.catchWord' placeholder="Enter Password" [ngClass]="{'is-invalid': userRegistrationForm.submitted && CatchWord.invalid }"
+            required>
+        <div class="error-msg" *ngIf="CatchWord.invalid && ((CatchWord.dirty || CatchWord.touched) ||  userRegistrationForm.submitted)"> Password must contain one special charcter, Aplha and one digit </div>
+
+    </div>
+    <div class="button-group d-flex align-items-center justify-content-end">
+        <button type="submit">Register</button>
+        <button type="button" (click)='forgotPaswwordfun(forgotPassword)'>Forget Password</button>
+    </div>
+</form>
+
+
+<ng-template #forgotPassword>
+
+    <form class="registration-form" #forgorPasswordForm="ngForm" autocomplete="off" novalidate (ngSubmit)="forgorPasswordFormFun()">
+        <h2>Forgot Password</h2>
+        <div class="form-group">
+            <div class="search-wrap">
+                <span class="input-label">Email Id</span>
+            </div>
+            <input type="email" #emailID='ngModel' pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" name="emailID" [(ngModel)]='forgotPwdObj.eMail' placeholder="Enter Email Id">
+            <div *ngIf="emailID.invalid && ((emailID.dirty || emailID.touched) || forgorPasswordForm.submitted)" class="alert alert-danger">
+                <div *ngIf="emailID.errors.required">
+                    Email is required.
+                </div>
+                <div *ngIf="emailID.errors.pattern">
+                    Please enter valid Email ID.
+                </div>
+            </div>
+        </div>
+
+        <!-- <botdetect-captcha styleName="exampleCaptcha"></botdetect-captcha>
+        <input type="text" id="captchaCode" name="captchaCode" #captchaCode="ngModel" ngModel correctCaptcha> -->
+        <ngx-recaptcha2 #captchaElem [siteKey]="'6LeOZ4YUAAAAAJ8clQYNtOXNDHsd58KZHyJeILk6'" (success)="handleSuccess($event)" [useGlobalDomain]="false" [size]="size" [hl]="lang" [theme]="theme" [type]="type" name='captchaElement' [(ngModel)]="forgotPwdObj.captchaElement"
+            required>
+        </ngx-recaptcha2>
+        <div class="button-group d-flex align-items-center justify-content-end">
+            <button type="submit">Send Verfication OTP to Email</button>
+            <button type="button" (click)='declineModal()'>Cancel</button>
+        </div>
+
+    </form>
+</ng-template>
